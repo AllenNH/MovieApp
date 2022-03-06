@@ -19,6 +19,16 @@ class ShowUser(BaseModel):
 
 class TokenData(BaseModel):
     id : Optional[int] = None
+    role : Optional[str] = None
     name: Optional[str] = None
+
+
+class cinema(BaseModel):
+
+    name : str 
+    noOfScreens : int
+
+
+
     
     

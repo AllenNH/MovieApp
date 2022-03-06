@@ -12,7 +12,7 @@ class User(Base):
     phone = Column(Integer, unique=True)
     name = Column(String)
     hashed_password = Column(String)
-    role = Column(String)
+    role = Column(String, default='user')
     timestamp = Column(DateTime)
 
     bookings = relationship('Booking', back_populates="users")
@@ -45,7 +45,7 @@ class Movie(Base):
 class Cinema(Base):
     __tablename__ = "cinema"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     noOfScreens = Column(Integer)
     user_id = Column(Integer, ForeignKey('users.id'))
     location_id = Column(Integer, ForeignKey('location.id'))

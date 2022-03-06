@@ -26,5 +26,5 @@ def login(request: OAuth2PasswordRequestForm = Depends(),
                             detail=f"Incorrect password")
 
     print(user.id)
-    access_token = token.create_access_token(data={"sub": str(user.id)})
+    access_token = token.create_access_token(data={"sub": str(user.id),"role": str(user.role)})
     return {"access_token": access_token, "token_type": "bearer"}

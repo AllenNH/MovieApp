@@ -11,7 +11,8 @@ router = APIRouter(
 )
 
 
-@router.post('/sign_up',response_model=schemas.ShowUser)
+@router.post('/sign_up',
+        response_model=schemas.ShowUser, status_code=status.HTTP_201_CREATED)
 def create(request : schemas.user, db : Session = Depends(get_db)):
     db_user = user.get_user_by_phone_no(db, phone=request.phone)
     if db_user:
@@ -20,7 +21,26 @@ def create(request : schemas.user, db : Session = Depends(get_db)):
     return user.create(request, db)
 
 
-@router.get('/user_details')
-def get_useer_details(db : Session = Depends(get_db),
+@router.get('/user_details', status_code=200)
+def get_user_details(db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
     return user.get_user_by_id(db, current_user.id)
+
+
+
+@router.put('/update_user_details', status_code=202)
+def update(request : schemas.user, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.get_current_user)):
+        pass
+
+@router.get('/user_details/{id}', status_code=200)
+def get_useer_details(id: int,db : Session = Depends(get_db)):
+    #only for admin
+    return user.get_user_by_id(db, id)
+
+
+@router.delete('/delete_user/{id}', status_code=204)
+def destroy(id, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.get_current_user)):
+        #only for admin
+    pass
