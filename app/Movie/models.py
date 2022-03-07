@@ -20,7 +20,7 @@ class User(Base):
 
 class Booking(Base):
     __tablename__ = "booking"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     noOfseats = Column(Integer)
     timestamp = Column(DateTime)
     status = Column(Boolean)
@@ -33,9 +33,9 @@ class Booking(Base):
 class Movie(Base):
     __tablename__ = "movie"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String)
+    title = Column(String, unique=True)
     description = Column(String)
-    duration = Column(Float)
+    duration = Column(Integer)
     language = Column(String)
     genre = Column(String)
     timestamp = Column(DateTime)

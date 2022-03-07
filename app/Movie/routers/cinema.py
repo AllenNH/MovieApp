@@ -12,12 +12,12 @@ router = APIRouter(
 )
 
 
-@router.post('/sign_up')
+@router.post('/add_cinema')
 def create(request : schemas.cinema, db : Session = Depends(get_db)):
     db_user = cinema.get_cinema_by_name(db, name=request.name)
     if db_user:
         raise HTTPException(status_code=400, 
-                detail=f"Account with {request.name} already exists")
+                detail=f"Cinema with name{request.name} already exists")
     return cinema.create(request, db)
 
 

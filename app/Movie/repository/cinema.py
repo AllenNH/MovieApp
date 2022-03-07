@@ -3,7 +3,7 @@ from Movie import schemas, models
 from sqlalchemy.orm import Session
 
 
-def get_user_by_id(db: Session, cinema_id: int):
+def get_cinema_by_id(db: Session, cinema_id: int):
     return db.query(models.Cinema).filter(models.Cinema.id == cinema_id).first()
 
 def get_cinema_by_name(db: Session, name: str):
@@ -22,17 +22,17 @@ def create(request : schemas.cinema, db : Session ):
 
 def show(id: int, db : Session):
     cinema = db.query(models.Cinema).filter(models.Cinema.id == id).first()
-    if not user:
+    if not cinema:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"User with the id {id} is not available")
     return cinema 
 
 
 def update(id: int, request: schemas.cinema, db : Session):
-    user = db.query(models.Cinema).filter(models.Cinema.id == id).first()
-    if not user:
+    cinema = db.query(models.Cinema).filter(models.Cinema.id == id).first()
+    if not cinema:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"User with the id {id} is not found")
-    user.update(request.dict())
+    cinema.update(request.dict())
     db.commit()
-    return user
+    return cinema

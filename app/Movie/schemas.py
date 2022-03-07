@@ -29,6 +29,21 @@ class cinema(BaseModel):
     noOfScreens : int
 
 
+class movie(BaseModel):
+    title : str
+    description : str
+    duration : int
+    language : str
+    genre : str
+    
+    
 
+class showMovie(BaseModel):
+    title : str
+    description : str
+    duration : int
+    language : str
+    genre : str
     
-    
+    class Config():
+        orm_mode = True
