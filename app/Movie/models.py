@@ -27,6 +27,8 @@ class Booking(Base):
     show_id = Column(Integer, ForeignKey('show.id'))
 
     users = relationship('User', back_populates="bookings")
+    show = relationship("Show",back_populates="bookings")
+    showSeat = relationship("ShowSeat",back_populates="bookings")
 
 
 class Movie(Base):
@@ -40,6 +42,8 @@ class Movie(Base):
     timestamp = Column(DateTime)
     user_id = Column(Integer, ForeignKey('users.id'))
 
+    show = relationship("Show",back_populates="movie")
+
 
 class Cinema(Base):
     __tablename__ = "cinema"
@@ -49,6 +53,9 @@ class Cinema(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
     location_id = Column(Integer, ForeignKey('location.id'))
 
+    location = relationship("Location",back_populates="cinema")
+    cinemaHall = relationship("CinemaHall",back_populates="cinema")
+
 
 class Location(Base):
     __tablename__ = "location"
@@ -56,6 +63,8 @@ class Location(Base):
     name = Column(String)
     state = Column(String)
     pincode = Column(Integer)
+
+    cinema = relationship("Cinema",back_populates="location")
 
 
 class CinemaHall(Base):
@@ -65,13 +74,21 @@ class CinemaHall(Base):
     totalSeats = Column(Integer)
     cinema_id = Column(Integer, ForeignKey('cinema.id'))  
 
+    cinema = relationship("Cinema",back_populates="cinemaHall")
+    cinemaSeat = relationship("CinemaSeat",back_populates="cinemaHall")
+    show = relationship("Show",back_populates="cinemaHall", uselist=False)
+
 class CinemaSeat(Base):
     __tablename__ = "cinemaSeat"
     id = Column(Integer, primary_key=True, index=True)
     seatNo = Column(String)
     seatType = Column(Integer)
-    flag = Column(Integer)
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id')) 
+
+    
+    cinemaHall = relationship("CinemaHall",back_populates="cinemaSeat")    
+    showSeat = relationship("ShowSeat",back_populates="cinemaSeat")
+
     
 
     
@@ -84,6 +101,11 @@ class Show(Base):
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id'))
     movie_id = Column(Integer, ForeignKey('movie.id'))
 
+    bookings = relationship('Booking', back_populates="show")
+    movie = relationship("Movie",back_populates="show")
+    cinemaHall = relationship("CinemaHall",back_populates="show")
+    showSeat = relationship("ShowSeat",back_populates="show")
+
 
 class ShowSeat(Base):
     __tablename__ = "showSeat"
@@ -93,6 +115,10 @@ class ShowSeat(Base):
     cinemaSeat_id = Column(Integer, ForeignKey('cinemaSeat.id'))
     show_id = Column(Integer, ForeignKey('show.id'))
     booking_id = Column(Integer, ForeignKey('booking.id'))
+
+    bookings = relationship('Booking', back_populates="showSeat")
+    cinemaSeat = relationship("CinemaSeat",back_populates="showSeat")
+    show = relationship("Show",back_populates="showSeat")
 
 
 

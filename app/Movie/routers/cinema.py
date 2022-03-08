@@ -4,6 +4,7 @@ from Movie import schemas, models, database, oauth2
 from Movie.hashing import Hash 
 from sqlalchemy.orm import Session
 from Movie.repository import cinema
+from typing import List
 
 get_db = database.get_db
 router = APIRouter(
@@ -20,19 +21,30 @@ def create(request : schemas.cinema, db : Session = Depends(get_db)):
                 detail=f"Cinema with name{request.name} already exists")
     return cinema.create(request, db)
 
+@router.get('/cinema_details',
+                    response_model=List[schemas.showCinema])
+def get_cinema_details(db : Session = Depends(get_db)):
+    return cinema.get_all(db)
 
+@router.put('/update_details/{id}', status_code=202)
+def update(id: int,request : schemas.cinema, db : Session = Depends(get_db)):
+    return cinema.update(id,request,db)
 
+@router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
+def destroy(id: int, db : Session = Depends(get_db)):
+    return cinema.destroy(id,db)
+'''
 @router.get('/cinema_details')
 def get_user_details(db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
-    pass
+    return cinema.show(db)
 
 
 
 @router.put('/update_cinema_details', status_code=202)
 def update(request : schemas.user, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
-    pass
+    return cinema.update()
 
 
 @router.delete('/delete_cinema/{id}', status_code=204)
@@ -45,3 +57,4 @@ def destroy(id, db : Session = Depends(get_db),
 def get_useer_details(id: int,db : Session = Depends(get_db)):
     #only for admin
     return cinema.get_user_by_id(db, id)
+'''

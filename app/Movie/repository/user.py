@@ -12,7 +12,7 @@ def get_user_by_id(db: Session, user_id: int):
                     detail = f"User with id {user_id} is not available")
     return user
 
-def get_user_by_phone_no(db: Session, phone: str):
+def get_user_by_phone_no(db: Session, phone: int):
     return db.query(models.User).filter(models.User.phone == phone).first()
 
 
@@ -42,3 +42,6 @@ def update(id: int, request: schemas.user, db : Session):
     user.update(request.dict())
     db.commit()
     return user
+
+def get_all(db):
+    return db.query(models.User).all()

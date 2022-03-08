@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, models
+from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
+from Movie import schemas, models
+from datetime import datetime
 
 
 def get_cinema_by_id(db: Session, cinema_id: int):
@@ -29,10 +30,24 @@ def show(id: int, db : Session):
 
 
 def update(id: int, request: schemas.cinema, db : Session):
-    cinema = db.query(models.Cinema).filter(models.Cinema.id == id).first()
-    if not cinema:
+    new_cinema = db.query(models.Cinema).filter(models.Cinema.id == id)
+    if not new_cinema:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"User with the id {id} is not found")
-    cinema.update(request.dict())
+    new_cinema.update(request.dict())
     db.commit()
-    return cinema
+    return "updated"
+
+def get_all(db: Session):    
+    return db.query(models.Cinema).all()
+
+
+def destroy(id: int,db: Session):
+    cinema = db.query(models.Cinema).filter(
+            models.Cinema.id == id)
+    if not cinema.first():
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
+            detail = f"Cinema with {id} is not available")
+    cinema.delete(synchronize_session=False)
+    db.commit()
+    return 'Deleted'

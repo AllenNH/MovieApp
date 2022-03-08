@@ -1,28 +1,123 @@
-from datetime import date, datetime, time, timedelta
-from pydantic import BaseModel
+from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, DateTime, Time
+from Movie.database import Base
+from sqlalchemy.orm import relationship
 
 
-class Model(BaseModel):
-    d: date = None
-    dt: datetime = None
-    t: time = None
-    td: timedelta = None
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    phone = Column(Integer, unique=True)
+    name = Column(String)
+    hashed_password = Column(String)
+    role = Column(String, default='user')
+    timestamp = Column(DateTime)
+
+    bookings = relationship('Booking', back_populates="users")
 
 
-m = Model(
-    d="2021-04-01",
-    dt='2032-04-23T23:30',
-    t="23:30:39",
-    td='P3DT12H30M5S',
-)
+class Booking(Base):
+    __tablename__ = "booking"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    noOfseats = Column(Integer)
+    timestamp = Column(DateTime)
+    status = Column(Boolean)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    show_id = Column(Integer, ForeignKey('show.id'))
 
-print(m.dict())
-"""
-{
-    'd': datetime.date(2032, 4, 22),
-    'dt': datetime.datetime(2032, 4, 23, 10, 20, 30, 400000,
-    tzinfo=datetime.timezone(datetime.timedelta(seconds=9000))),
-    't': datetime.time(4, 8, 16),
-    'td': datetime.timedelta(days=3, seconds=45005),
-}
-"""
+    users = relationship('User', back_populates="bookings")
+    show = relationship("Show",back_populates="bookings")
+    showSeat = relationship("ShowSeat",back_populates="bookings")
+
+
+class Movie(Base):
+    __tablename__ = "movie"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, unique=True)
+    description = Column(String)
+    duration = Column(Integer)
+    language = Column(String)
+    genre = Column(String)
+    timestamp = Column(DateTime)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    show = relationship("Show",back_populates="movie")
+
+class Cinema(Base):
+    __tablename__ = "cinema"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True)
+    noOfScreens = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    location_id = Column(Integer, ForeignKey('location.id'))
+
+    location = relationship("Location",back_populates="cinema")
+    cinemaHall = relationship("CinemaHall",back_populates="cinema")
+
+class Location(Base):
+    __tablename__ = "location"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    state = Column(String)
+    pincode = Column(Integer)
+
+    cinema = relationship("Cinema",back_populates="location")
+
+class CinemaHall(Base):
+    __tablename__ = "cinemaHall"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    totalSeats = Column(Integer)
+    cinema_id = Column(Integer, ForeignKey('cinema.id'))  
+
+    cinema = relationship("Cinema",back_populates="cinemaHall")
+    cinemaSeat = relationship("CinemaSeat",back_populates="cinemaHall")
+
+class CinemaSeat(Base):
+    __tablename__ = "cinemaSeat"
+    id = Column(Integer, primary_key=True, index=True)
+    seatNo = Column(String)
+    seatType = Column(Integer)
+    flag = Column(Integer)
+    cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id')) 
+
+    cinemaHall = relationship("CinemaHall",back_populates="cinema")
+    #show = relationship("Show",back_populates="cinemaSeat", uselist=False)
+    showSeat = relationship("ShowSeat",back_populates="cinemaSeat")
+    
+
+    
+class Show(Base):
+    __tablename__ = "show"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    showDate = Column(DateTime)
+    startTime = Column(Time)
+    endTime = Column(Time)
+    cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id'))
+    movie_id = Column(Integer, ForeignKey('movie.id'))
+
+    bookings = relationship('Booking', back_populates="show")
+    movie = relationship("Movie",back_populates="show")
+    cinemaSeat = relationship("CinemaSeat",back_populates="show")
+    showSeat = relationship("ShowSeat",back_populates="show")
+
+
+
+class ShowSeat(Base):
+    __tablename__ = "showSeat"
+    id = Column(Integer, primary_key=True, index=True)
+    status = Column(Boolean)
+    price = Column(Float)
+    timestamp = Column(DateTime)
+    cinemaSeat_id = Column(Integer, ForeignKey('cinemaSeat.id'))
+    show_id = Column(Integer, ForeignKey('show.id'))
+    booking_id = Column(Integer, ForeignKey('booking.id'))
+
+    show = relationship("Show",back_populates="showSeat")
+    cinemaSeat = relationship("CinemaSeat",back_populates="showSeat")
+    bookings = relationship('Booking', back_populates="showSeat")
+
+
+
+

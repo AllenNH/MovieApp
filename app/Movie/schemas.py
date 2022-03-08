@@ -11,13 +11,7 @@ class user(BaseModel):
     password : str
 
 
-class ShowUser(BaseModel):
-    id : int
-    phone : int
-    name : str
-    
-    class Config():
-        orm_mode = True
+
     
 
 class TokenData(BaseModel):
@@ -30,6 +24,13 @@ class cinema(BaseModel):
 
     name : str 
     noOfScreens : int
+
+class showCinema(BaseModel):
+    id: int
+    name : str 
+    noOfScreens : int
+    class Config():
+        orm_mode = True
 
 
 class movie(BaseModel):
@@ -146,5 +147,14 @@ class showCinemaSeat(BaseModel):
     flag : int 
     cinemaHall_id :int  
 
+    class Config():
+        orm_mode = True
+
+class showUser(BaseModel):
+    id : int
+    phone : int
+    name : str
+    bookings : List[showBooking] = []
+    
     class Config():
         orm_mode = True
