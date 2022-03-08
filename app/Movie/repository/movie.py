@@ -37,7 +37,7 @@ def update(title : str, request: schemas.movie, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Movie with title {title} not found")
     movie_exist = db.query(models.Movie).filter(models.Movie.title == request.title)
-    if  movie.first():
+    if  movie_exist.first():
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail=f"Movie with title {title} already present")
     movie.update(request.dict())

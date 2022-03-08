@@ -28,13 +28,16 @@ def create(request : schemas.movie , db : Session = Depends(get_db)):
 def get_all_movie(db : Session = Depends(get_db)):
     return movie.get_all_movie(db)
 
+@router.get('/movie_details/{title}', status_code=200)
+def get_movie_by_title(title: str, db : Session = Depends(get_db)):
+    return movie.get_movie_by_name(db,title)
 
-@router.put('/{title}', status_code=202)
+@router.put('/edit/{title}', status_code=202)
 def update(title,request : schemas.movie, db : Session = Depends(get_db)):
     return movie.update(title,request,db)
 
 
-@router.delete('/{title}', status_code=status.HTTP_200_OK)
+@router.delete('/delete/{title}', status_code=status.HTTP_200_OK)
 def destroy(title, db : Session = Depends(get_db)):
     return movie.destroy(title,db)
 

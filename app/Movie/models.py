@@ -1,5 +1,4 @@
-from turtle import title
-from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, DateTime, Time
 from Movie.database import Base
 from sqlalchemy.orm import relationship
 
@@ -76,10 +75,10 @@ class CinemaSeat(Base):
     
 class Show(Base):
     __tablename__ = "show"
-    id = Column(Integer, primary_key=True, index=True)
-    date = Column(DateTime)
-    startTime = Column(DateTime)
-    endTime = Column(DateTime)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    showDate = Column(DateTime)
+    startTime = Column(Time)
+    endTime = Column(Time)
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id'))
     movie_id = Column(Integer, ForeignKey('movie.id'))
 

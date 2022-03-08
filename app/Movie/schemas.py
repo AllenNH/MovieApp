@@ -1,3 +1,4 @@
+from datetime import date, time
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -45,5 +46,57 @@ class showMovie(BaseModel):
     language : str
     genre : str
     
+    class Config():
+        orm_mode = True
+
+class show(BaseModel):
+    showDate : date
+    startTime :  time
+    endTime : time
+    cinemaHall_id : int
+    movie_id : int
+
+class showShow(BaseModel):
+
+    id : int
+    showDate : date
+    startTime :  time
+    endTime : time
+    cinemaHall_id : int
+    movie_id : int
+    
+    class Config():
+        orm_mode = True
+
+class location(BaseModel):
+
+    name : str
+    state : str
+    pincode : int
+
+class showLocation(BaseModel):
+
+    id : int
+    name : str
+    state : str
+    pincode : int
+
+    class Config():
+        orm_mode = True
+
+class booking(BaseModel):
+    noOfseats : int
+    status : int
+    user_id : int
+    show_id : int 
+
+
+class showBooking(BaseModel):
+    id: int
+    noOfseats : int
+    status : bool
+    user_id : int
+    show_id : int 
+
     class Config():
         orm_mode = True
