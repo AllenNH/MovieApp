@@ -70,7 +70,9 @@ class CinemaSeat(Base):
     id = Column(Integer, primary_key=True, index=True)
     seatNo = Column(String)
     seatType = Column(Integer)
+    flag = Column(Integer)
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id')) 
+    
 
     
 class Show(Base):

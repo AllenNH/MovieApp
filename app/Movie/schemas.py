@@ -134,3 +134,17 @@ class showCinemaHall(BaseModel):
     class Config():
         orm_mode = True
      
+class cinemaSeat(BaseModel):
+    seatNo : str 
+    seatType : int
+    flag : int 
+    cinemaHall_id :int 
+
+class showCinemaSeat(BaseModel):
+    seatNo : str 
+    seatType : int
+    flag : int 
+    cinemaHall_id :int  
+
+    class Config():
+        orm_mode = True
