@@ -2,6 +2,8 @@ from datetime import date, time
 from typing import List, Optional
 from pydantic import BaseModel
 
+from Movie.models import CinemaSeat
+
 class user(BaseModel):
     
     name : str
@@ -100,3 +102,35 @@ class showBooking(BaseModel):
 
     class Config():
         orm_mode = True
+ 
+class showSeat(BaseModel):
+    status: bool
+    price : float
+    cinemaSeat_id : int
+    show_id : int
+    booking_id : int 
+
+class showShowSeat(BaseModel):
+    status: bool
+    price : float
+    cinemaSeat_id : int
+    show_id : int
+    booking_id : int 
+
+    class Config():
+        orm_mode = True
+ 
+class cinemaHall(BaseModel):
+     name : str
+     totalSeats : int 
+     cinema_id : int 
+
+class showCinemaHall(BaseModel):
+    id: int
+    name : str
+    totalSeats : int
+    cinema_id : int 
+
+    class Config():
+        orm_mode = True
+     
