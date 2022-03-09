@@ -82,6 +82,7 @@ class booking(BaseModel):
     status : int
     user_id : int
     show_id : int 
+    seat_ids : list[int]
 
 
 class showBooking(BaseModel):
@@ -173,3 +174,4 @@ class showShow(BaseModel):
     
     class Config():
         orm_mode = True
+

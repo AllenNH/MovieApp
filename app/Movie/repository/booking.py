@@ -2,6 +2,7 @@ from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 from Movie import schemas, models
 from datetime import datetime
+import re
 
 
 def get_booking_by_id(db : Session, Booking_id : int):
@@ -17,6 +18,24 @@ def create(request : schemas.booking, db : Session ):
     db.add(new_booking)
     db.commit()
     db.refresh(new_booking)
+    db.begin_nested()
+    for seat_id in request.seat_ids:    
+        
+        show_seat = db.query(models.ShowSeat).\
+            filter(models.ShowSeat.cinemaSeat_id == seat_id).first()
+        
+        if show_seat.status:
+            db.rollback()
+            destroy(new_booking.id,db)
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"seat with id {seat_id} is already booked")
+        else:
+            show_seat.status = 1
+            show_seat.booking_id = new_booking.id
+
+    
+
+    db.commit()
     return new_booking
 
 

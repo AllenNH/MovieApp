@@ -14,6 +14,9 @@ router = APIRouter(
 
 @router.post('/add_booking')
 def create(request : schemas.booking , db : Session = Depends(get_db)):
+    if request.noOfseats != len(request.seat_ids):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"Number of seats and seat ids must match")
     return booking.create(request, db)
 
 
@@ -34,3 +37,5 @@ def update(id: int,request : schemas.booking, db : Session = Depends(get_db)):
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
 def destroy(id: int, db : Session = Depends(get_db)):
     return booking.destroy(id,db)
+
+
