@@ -46,3 +46,7 @@ def delete(id: int,db: Session):
     show.delete(synchronize_session=False)
     db.commit()
     return 'Deleted'
+
+def get_by_name(name,db: Session):
+    show = db.query(models.Show).join(models.Movie).filter(models.Movie.title == name).all()
+    return show

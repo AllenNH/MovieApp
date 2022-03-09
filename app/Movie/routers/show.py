@@ -30,3 +30,9 @@ def update(id: int,request : schemas.show, db : Session = Depends(get_db)):
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
 def destroy(id: int, db : Session = Depends(get_db)):
     return show.delete(id,db)
+
+
+@router.get('/search_Movie',status_code=200,
+            response_model=List[schemas.showShow])
+def get_show_by_movie_name(name: str,db : Session = Depends(get_db)):
+    return show.get_by_name(name, db)

@@ -82,7 +82,8 @@ class CinemaSeat(Base):
     __tablename__ = "cinemaSeat"
     id = Column(Integer, primary_key=True, index=True)
     seatNo = Column(String)
-    seatType = Column(Integer)
+    seatType = Column(String)
+    flag = Column(Integer, default=1)
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id')) 
 
     

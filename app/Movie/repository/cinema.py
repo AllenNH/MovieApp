@@ -14,7 +14,8 @@ def get_cinema_by_name(db: Session, name: str):
 def create(request : schemas.cinema, db : Session ):
     new_cinema = models.Cinema(name=request.name,
                 noOfScreens=request.noOfScreens,
-            user_id = 0,location_id = 0)
+            user_id = 0,
+            location_id = request.location_id)
     db.add(new_cinema)
     db.commit()
     db.refresh(new_cinema)

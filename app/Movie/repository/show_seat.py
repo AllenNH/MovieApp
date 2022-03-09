@@ -1,3 +1,4 @@
+from tkinter import N
 from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 from Movie import schemas, models
@@ -42,3 +43,17 @@ def destroy(id: int,db: Session):
     showSeat.delete(synchronize_session=False)
     db.commit()
     return 'Deleted'
+
+def setup_seat(classic, classic_plus, premium,
+                                    show_id, cinemaHall_id, db):
+    cinema_seats= db.query(models.CinemaSeat
+                ).filter(models.CinemaSeat.cinemaHall_id == cinemaHall_id).all()  
+    price = {"classic": classic,
+            "classic_plus": classic_plus,"premium": premium}
+    print(price)
+    
+    for seat in cinema_seats:
+        request = schemas.showSeat(status=0,price=price.get(seat.seatType,0),
+                                    cinemaSeat_id=seat.id,
+                                    show_id=show_id,booking_id=0)
+        print(create(request, db))

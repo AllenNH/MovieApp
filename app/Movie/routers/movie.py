@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from Movie import schemas, database
 from sqlalchemy.orm import Session
 from Movie.repository import movie
-from typing import List 
+from typing import List, Optional 
 
 
 get_db = database.get_db
@@ -41,4 +41,6 @@ def update(title,request : schemas.movie, db : Session = Depends(get_db)):
 def destroy(title, db : Session = Depends(get_db)):
     return movie.destroy(title,db)
 
-
+@router.get('/Search')
+def search_movie(name : Optional[str] = None,  db : Session = Depends(get_db) ):
+    return movie.get_movie_by_name(db,name)

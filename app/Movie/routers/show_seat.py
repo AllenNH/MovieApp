@@ -35,3 +35,12 @@ def update(id: int,request : schemas.showSeat, db : Session = Depends(get_db)):
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
 def destroy(id: int, db : Session = Depends(get_db)):
     return show_seat.destroy(id,db)
+
+@router.post('/setup_seat')
+def setup_seat(classic: float,classic_plus: float,premium: float,
+                show_id: int,cinema_hall_id:int,
+                db : Session = Depends(get_db)):
+    
+    return show_seat.setup_seat(classic, classic_plus, premium,
+                                    show_id, cinema_hall_id, db)
+

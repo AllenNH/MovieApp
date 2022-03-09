@@ -9,9 +9,6 @@ class user(BaseModel):
     name : str
     phone : int 
     password : str
-
-
-
     
 
 class TokenData(BaseModel):
@@ -24,11 +21,13 @@ class cinema(BaseModel):
 
     name : str 
     noOfScreens : int
+    location_id: int
 
 class showCinema(BaseModel):
     id: int
     name : str 
     noOfScreens : int
+    location_id: int
     class Config():
         orm_mode = True
 
@@ -43,6 +42,7 @@ class movie(BaseModel):
     
 
 class showMovie(BaseModel):
+    id: int
     title : str
     description : str
     duration : int
@@ -59,17 +59,7 @@ class show(BaseModel):
     cinemaHall_id : int
     movie_id : int
 
-class showShow(BaseModel):
 
-    id : int
-    showDate : date
-    startTime :  time
-    endTime : time
-    cinemaHall_id : int
-    movie_id : int
-    
-    class Config():
-        orm_mode = True
 
 class location(BaseModel):
 
@@ -111,15 +101,6 @@ class showSeat(BaseModel):
     show_id : int
     booking_id : int 
 
-class showShowSeat(BaseModel):
-    status: bool
-    price : float
-    cinemaSeat_id : int
-    show_id : int
-    booking_id : int 
-
-    class Config():
-        orm_mode = True
  
 class cinemaHall(BaseModel):
      name : str
@@ -137,15 +118,16 @@ class showCinemaHall(BaseModel):
      
 class cinemaSeat(BaseModel):
     seatNo : str 
-    seatType : int
+    seatType : str
     flag : int 
     cinemaHall_id :int 
 
 class showCinemaSeat(BaseModel):
+    id: int
     seatNo : str 
-    seatType : int
+    seatType : str
     flag : int 
-    cinemaHall_id :int  
+    cinemaHall_id :int 
 
     class Config():
         orm_mode = True
@@ -155,6 +137,39 @@ class showUser(BaseModel):
     phone : int
     name : str
     bookings : List[showBooking] = []
+    
+    class Config():
+        orm_mode = True
+
+class cinemaSeatType(BaseModel):
+    seatType : str
+    seatNo : str
+
+    class Config():
+        orm_mode = True
+
+class showShowSeat(BaseModel):
+    status: bool
+    price : float
+    cinemaSeat_id : int
+    show_id : int
+    booking_id : int 
+
+    cinemaSeat : cinemaSeatType
+    class Config():
+        orm_mode = True
+
+
+class showShow(BaseModel):
+
+    id : int
+    showDate : date
+    startTime :  time
+    endTime : time
+    cinemaHall_id : int
+    movie_id : int
+
+    showSeat : List[showShowSeat] = None
     
     class Config():
         orm_mode = True
