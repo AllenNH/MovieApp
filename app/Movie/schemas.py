@@ -123,6 +123,25 @@ class cinemaSeat(BaseModel):
     flag : int 
     cinemaHall_id :int 
 
+
+class cinemaSeatAddRow(BaseModel):
+    seatType : str
+    rowName : str
+    noOfSeats : int
+    flag : int 
+    cinemaHall_id :int
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "seatType": "classic/classic_plus/premium",
+                "rowName": "A/B/C/AA-ZZ",
+                "noOfSeats": 16,
+                "cinemaHall_id": 0,
+            }
+        }
+
+
 class showCinemaSeat(BaseModel):
     id: int
     seatNo : str 
@@ -174,4 +193,6 @@ class showShow(BaseModel):
     
     class Config():
         orm_mode = True
+
+
 

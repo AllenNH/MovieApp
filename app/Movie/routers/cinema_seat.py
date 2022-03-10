@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post('/add_cinemaSeat')
-def create(request : schemas.cinemaSeat , db : Session = Depends(get_db)):
+def create(request : schemas.cinemaSeatAddRow , db : Session = Depends(get_db)):
     return cinema_seat.create(request, db)
 
 

@@ -2,6 +2,7 @@ from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 from Movie import schemas, models
 from datetime import datetime
+import re
 
 
 def get_by_id(db : Session, cinemaSeat_id : int):
@@ -9,14 +10,23 @@ def get_by_id(db : Session, cinemaSeat_id : int):
 
 
 def create(request : schemas.cinemaSeat, db : Session ):
-    new_cinemaSeat = models.CinemaSeat(seatNo=request.seatNo, 
-                                        seatType=request.seatType,
-                                        flag=request.flag,
-                                        cinemaHall_id=request.cinemaHall_id)                    
-    db.add(new_cinemaSeat)
-    db.commit()
-    db.refresh(new_cinemaSeat)
-    return new_cinemaSeat
+    seatNumRegex = re.compile(r'^[A-Z]{1,2}$')
+    if not seatNumRegex.match(request.rowName):  
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Seat Row format incorrect{request.rowName} eg: A,D,AA,GZ")
+    seat_ids = []
+    
+    for seatNum in range(1,request.noOfSeats+1):
+        seatNo = request.rowName + "-" + str(seatNum)        
+        new_cinemaSeat = models.CinemaSeat(seatNo=seatNo, 
+                                            seatType=request.seatType,
+                                            flag=request.flag,
+                                            cinemaHall_id=request.cinemaHall_id)                    
+        db.add(new_cinemaSeat)
+        db.commit()
+        db.refresh(new_cinemaSeat)
+        seat_ids.append(new_cinemaSeat.id)
+    return f"seats added with ids{seat_ids}"
 
 def get_all(db: Session):    
     return db.query(models.CinemaSeat).all()
