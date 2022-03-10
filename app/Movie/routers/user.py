@@ -35,7 +35,7 @@ def update(request : schemas.user, db : Session = Depends(get_db),
         pass
 
 @router.get('/user_details/{id}', status_code=200)
-def get_useer_details(id: int,db : Session = Depends(get_db)):
+def get_user_details(id: int,db : Session = Depends(get_db)):
     #only for admin
     return user.get_user_by_id(db, id)
 

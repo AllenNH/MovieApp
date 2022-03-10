@@ -2,6 +2,7 @@ from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 from Movie import schemas, models
 from datetime import datetime
+from sqlalchemy.sql import func
 import re
 
 
@@ -36,6 +37,20 @@ def create(request : schemas.booking, db : Session ):
     
 
     db.commit()
+    total_amt = db.query(func.sum(models.ShowSeat.price).label('amount')).\
+            filter(models.ShowSeat.booking_id == new_booking.id).all()
+    
+    print(total_amt[0].amount)
+
+    payment = models.Payment(amount=total_amt[0].amount,
+                    timestamp = datetime.utcnow(),
+                    transaction_id = 11111,
+                    booking_id = new_booking.id)  
+    db.add(payment)
+    db.commit()
+    db.refresh(payment)
+
+
     return new_booking
 
 

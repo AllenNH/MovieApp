@@ -29,6 +29,7 @@ class Booking(Base):
     users = relationship('User', back_populates="bookings")
     show = relationship("Show",back_populates="bookings")
     showSeat = relationship("ShowSeat",back_populates="bookings")
+    payment = relationship('Payment', back_populates="bookings")
 
 
 class Movie(Base):
@@ -120,6 +121,18 @@ class ShowSeat(Base):
     bookings = relationship('Booking', back_populates="showSeat")
     cinemaSeat = relationship("CinemaSeat",back_populates="showSeat")
     show = relationship("Show",back_populates="showSeat")
+
+class Payment(Base):
+    __tablename__ ="payment"
+    id = Column(Integer, primary_key=True,index=True)
+    amount = Column(Float)
+    timestamp = Column(DateTime)
+    transaction_id = Column(Integer)
+    booking_id = Column(Integer, ForeignKey('booking.id'))
+
+    bookings = relationship('Booking', back_populates="payment")
+    
+
 
 
 

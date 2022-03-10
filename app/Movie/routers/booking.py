@@ -39,3 +39,6 @@ def destroy(id: int, db : Session = Depends(get_db)):
     return booking.destroy(id,db)
 
 
+
+
+
