@@ -10,11 +10,11 @@ def get_booking_by_id(db : Session, Booking_id : int):
     return db.query(models.Booking).filter(models.Booking.id == Booking_id).first()
 
 
-def create(request : schemas.booking, db : Session ):
+def create(request : schemas.booking, db : Session, id: int ):
     new_booking = models.Booking(noOfseats=request.noOfseats,
                     timestamp = datetime.utcnow(),
                     status = request.status,
-                    user_id = request.user_id,
+                    user_id = id,
                     show_id = request.show_id)                    
     db.add(new_booking)
     db.commit()

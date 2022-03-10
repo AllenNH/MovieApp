@@ -14,7 +14,8 @@ router = APIRouter(
 
 
 @router.post('/add_show')
-def create(request : schemas.show, db : Session = Depends(get_db)):
+def create(request : schemas.show, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     return show.create(request, db)
 
 @router.get('/show_details',status_code=200,
@@ -23,12 +24,14 @@ def get_all_show(db : Session = Depends(get_db)):
     return show.get_all_show(db)
 
 @router.put('/edit/{id}')
-def update(id: int,request : schemas.show, db : Session = Depends(get_db)):
+def update(id: int,request : schemas.show, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     return show.update(id,request,db)
 
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-def destroy(id: int, db : Session = Depends(get_db)):
+def destroy(id: int, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     return show.delete(id,db)
 
 

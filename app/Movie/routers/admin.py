@@ -2,33 +2,27 @@ from fastapi import APIRouter, Depends, status, HTTPException, Response
 from Movie import schemas, models, database, oauth2
 from Movie.hashing import Hash 
 from sqlalchemy.orm import Session
-from Movie.repository import user
+from Movie.repository import admin
 from typing import List
 
 get_db = database.get_db
 router = APIRouter(
-    prefix='/user',
-    tags=["Users"]
+    prefix='/admin',
+    tags=["Admin"]
 )
 
 
-@router.post('/sign_up',
-        response_model=schemas.showUser, status_code=status.HTTP_201_CREATED)
-def create(request : schemas.user, db : Session = Depends(get_db)):
-    db_user = user.get_user_by_phone_no(db, phone=request.phone)
-    if db_user:
-        raise HTTPException(status_code=400, 
-                detail=f"Account with {request.phone} already exists")
-    return user.create(request, db)
 
 
-@router.get('/user_details', status_code=200)
-def get_user_details(db : Session = Depends(get_db),
-        current_user: schemas.user = Depends(oauth2.get_current_user)):
-    return user.get_user_by_id(db, current_user.id)
+@router.put('/change_privilege/{id}', status_code=202)
+def get_user_details(id: int,role: int,db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
+    if current_user.id == id:
+        raise  HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                            detail=f"user cant change his own privilege")
+    return admin.update(id,role,db)
 
-
-
+'''
 @router.put('/update_user_details', status_code=202)
 def update(request : schemas.user, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
@@ -52,3 +46,4 @@ def destroy(id, db : Session = Depends(get_db),
 def get_user_details(db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return user.get_all(db)
+'''

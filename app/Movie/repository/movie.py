@@ -13,13 +13,13 @@ def get_movie_by_id(db : Session, movie_id : int):
     return db.query(models.Movie).filter(models.Movie.id == movie_id).first()
 
 
-def create(request : schemas.movie, db : Session ):
+def create(request : schemas.movie, db : Session, id: int ):
     new_movie = models.Movie(title=request.title,
                 description=request.description,
                 duration=request.duration,
                 language=request.language,
                 genre=request.genre,
-                user_id = 0,
+                user_id = id,
                 timestamp = datetime.utcnow())
     db.add(new_movie)
     db.commit()

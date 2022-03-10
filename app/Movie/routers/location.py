@@ -14,7 +14,8 @@ router = APIRouter(
 
 
 @router.post('/add_location')
-def create(request : schemas.location , db : Session = Depends(get_db)):
+def create(request : schemas.location , db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
     db_location = location.get_location_by_name(db, request.name)
     if db_location:
         raise HTTPException(status_code=400, 
@@ -33,11 +34,13 @@ def get_location_by_name(name: str,
     return location.get_location_by_name(db,name)
 
 @router.put('/edit/{id}', status_code=202)
-def update(id: int,request : schemas.location, db : Session = Depends(get_db)):
+def update(id: int,request : schemas.location, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return location.update(id,request,db)
 
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-def destroy(id: int, db : Session = Depends(get_db)):
+def destroy(id: int, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return location.destroy(id,db)
 
