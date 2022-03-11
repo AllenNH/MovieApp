@@ -45,7 +45,25 @@ def destroy(id: int,db: Session):
     return 'Deleted'
 
 def setup_seat(classic, classic_plus, premium,
-                                    show_id, cinemaHall_id, db):
+                                    show_id, cinemaHall_id, db, id: int, role: str):
+    if role != 'admin':
+        check_user = db.query(models.Cinema.user_id).\
+            join(models.CinemaHall).\
+            join(models.Show).\
+            filter(models.Show.id ==request.Show).first()
+        if id != check_user[0]:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Show with id {show_id} doesn't belong to current user")
+        check_user = db.query(models.Cinema.user_id).\
+            join(models.CinemaHall).\
+            filter(models.CinemaHall.id ==cinemaHall_id).first()
+        if id != check_user[0]:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Cinema Hall id: {cinemaHall_id } doesn't belong to current user")
+        
+
+        
+        
     cinema_seats= db.query(models.CinemaSeat
                 ).filter(models.CinemaSeat.cinemaHall_id == cinemaHall_id).all()  
     price = {"classic": classic,

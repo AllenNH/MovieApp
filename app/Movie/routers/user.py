@@ -4,6 +4,7 @@ from Movie.hashing import Hash
 from sqlalchemy.orm import Session
 from Movie.repository import user
 from typing import List
+import re
 
 get_db = database.get_db
 router = APIRouter(
@@ -19,6 +20,10 @@ def create(request : schemas.user, db : Session = Depends(get_db)):
     if db_user:
         raise HTTPException(status_code=400, 
                 detail=f"Account with {request.phone} already exists")
+    phoneNumRegex = re.compile(r'^(\+[0-9]{2}[- ]?)?[0-9]{10}$')
+    if not phoneNumRegex.match(str(request.phone)):
+        raise HTTPException(status_code=400, 
+                detail=f"Phone number invalid {request.phone} ")
     return user.create(request, db)
 
 
@@ -41,11 +46,15 @@ def get_user_details(id: int,db : Session = Depends(get_db),
     return user.get_user_by_id(db, id)
 
 
-@router.delete('/delete_user/{id}', status_code=204)
+@router.delete('/delete_user/{id}', status_code=200)
 def destroy(id, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
-        #only for admin
-    pass
+        
+        if id == str(current_user.id):
+            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                            detail=f"Can't delete own account")
+        return user.destroy(db, id)
+ 
 
 @router.get('/user_details_all', status_code=200,
                 response_model=List[schemas.showUser])

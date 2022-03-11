@@ -53,10 +53,13 @@ def create(request : schemas.booking, db : Session, id: int ):
 
     return new_booking
 
+def get_user_booking(db: Session, id: int):
+    booking_details = db.query(models.Booking).filter(models.Booking.user_id == id).all()
+    return booking_details
 
 def get_all_booking(db: Session):
-    location = db.query(models.Booking).all()
-    return location
+    booking_details = db.query(models.Booking).all()
+    return booking_details
 
 def update(id: int, request: schemas.booking, db: Session):
     booking = db.query(models.Booking).filter(models.Booking.id == id)

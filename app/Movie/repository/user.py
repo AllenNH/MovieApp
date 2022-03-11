@@ -45,5 +45,15 @@ def update(id: int, request: schemas.user, db : Session):
     db.commit()
     return user
 
+def destroy(db: Session, id : int):
+    movie = db.query(models.User).filter(
+            models.User.id == id)
+    if not movie.first():
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
+            detail = f"User with id {id} is not available")
+    movie.delete(synchronize_session=False)
+    db.commit()
+    return 'Deleted'
+
 def get_all(db):
     return db.query(models.User).all()

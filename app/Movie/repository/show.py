@@ -1,10 +1,25 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from Movie import schemas, models
 from sqlalchemy.orm import Session
+from Movie.repository import movie
 
 
 
-def create(request : schemas.show, db : Session ):
+def create(request : schemas.show, db : Session, id : int, role : str):
+    if role != 'admin':
+        check_user = db.query(models.Cinema.user_id).\
+            join(models.CinemaHall).\
+            filter(models.CinemaHall.id ==request.cinemaHall_id).first()
+        if id != check_user[0]:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Cinema Hall id {request.cinemaHall_id } doesn't belong to current user")
+        check_movie = movie.get_movie_by_id(db, request.movie_id)
+        if check_movie is None:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Movie with id {request.movie_id} is not present")
+
+    
+    
     new_show = models.Show(showDate=request.showDate,
                 startTime=request.startTime,
                 endTime=request.endTime,

@@ -31,16 +31,17 @@ def get_all_movie(db: Session):
     movie = db.query(models.Movie).all()
     return movie
 
-def update(title : str, request: schemas.movie, db: Session):
+def update(title : str, request: schemas.movie, db: Session, id : int):
     movie = db.query(models.Movie).filter(models.Movie.title == title)
     if not movie.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Movie with title {title} not found")
-    movie_exist = db.query(models.Movie).filter(models.Movie.title == request.title)
-    if  movie_exist.first():
+    movie_exist = db.query(models.Movie).filter(models.Movie.title == request.title).first()
+    if  movie_exist and movie_exist.title != request.title:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail=f"Movie with title {title} already present")
     movie.update(request.dict())
+    movie.user_id = id
     db.commit()
     return 'updated'
 

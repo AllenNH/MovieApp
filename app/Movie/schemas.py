@@ -9,6 +9,16 @@ class user(BaseModel):
     name : str
     phone : int 
     password : str
+    role: Optional[str] = None
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "name" : "Allen Nelson",
+                "phone" : 7594810189,
+                "password" : "Password"
+            }
+        }
     
 
 class TokenData(BaseModel):
@@ -22,6 +32,15 @@ class cinema(BaseModel):
     name : str 
     noOfScreens : int
     location_id: int
+
+    class Config:
+        schema_extra = {
+                "example": {
+                "name": "PVR",
+                "noOfScreens": 8,
+                "location_id": 1
+                }
+            }
 
 class showCinema(BaseModel):
     id: int
@@ -38,6 +57,18 @@ class movie(BaseModel):
     duration : int
     language : str
     genre : str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "title": "Cars 2",
+                "description": "About cars",
+                "duration": 120,
+                "language": "English",
+                "genre": "Animation"
+            }
+        }
+    
     
     
 
@@ -66,6 +97,15 @@ class location(BaseModel):
     name : str
     state : str
     pincode : int
+
+    class Config:
+        schema_extra = {
+            "example": {
+            "name": "Kochi",
+            "state": "Kerala",
+            "pincode": 682020
+            }
+        }
 
 class showLocation(BaseModel):
 
@@ -136,6 +176,7 @@ class cinemaSeatAddRow(BaseModel):
             "example": {
                 "seatType": "classic/classic_plus/premium",
                 "rowName": "A/B/C/AA-ZZ",
+                "flag": 1,
                 "noOfSeats": 16,
                 "cinemaHall_id": 0,
             }

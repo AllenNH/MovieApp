@@ -23,11 +23,13 @@ def create(request : schemas.booking , db : Session = Depends(get_db),
 
 @router.get('/booking_details',status_code=200,
             response_model=List[schemas.showBooking])
-def get_all_booking(db : Session = Depends(get_db)):
-    return booking.get_all_booking(db)
+def get_user_booking(db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.get_current_user)):
+    return booking.get_user_booking(db, current_user.id)
 
 @router.get('/booking_details/{id}', status_code=200)
-def get_booking_by_id(id: int,db : Session = Depends(get_db)):
+def get_booking_by_id(id: int,db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return booking.get_booking_by_id(db,id)
 
 @router.put('/edit/{id}', status_code=202)

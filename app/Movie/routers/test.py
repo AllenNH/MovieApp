@@ -19,3 +19,12 @@ def sum_price(booking_id : int , db : Session = Depends(get_db)):
             filter(models.ShowSeat.booking_id == booking_id).all()
     
     print(total_amt[0].amount)
+
+@router.post('/query')
+def query(id : int , db : Session = Depends(get_db)):
+    check_user = db.query(models.Cinema.user_id).\
+            join(models.CinemaHall).\
+            join(models.Show).\
+            filter(models.Show.id ==id).first()
+    #cinema_list = [check_id[i].user_id for i in range(len(check_id)) ]
+    print(check_user[0])

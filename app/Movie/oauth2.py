@@ -37,8 +37,10 @@ def check_if_merchant(data: str = Depends(oauth2_scheme)):
         headers={"WWW-Authenticate": "Bearer"},
     )
     print("checking admin")
+    
     token_details = token.verify_token(data, credentials_exception)
-    if token_details.role!= "admin" or token_details.role!= "merchant":
+    print(token_details.role)
+    if token_details.role!= "admin" and token_details.role!= "merchant":
         raise credentials_exception
     return token_details
 

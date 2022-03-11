@@ -14,24 +14,32 @@ router = APIRouter(
 
 
 @router.post('/add_cinema')
-def create(request : schemas.cinema, db : Session = Depends(get_db)):
+def create(request : schemas.cinema, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     db_user = cinema.get_cinema_by_name(db, name=request.name)
     if db_user:
         raise HTTPException(status_code=400, 
                 detail=f"Cinema with name{request.name} already exists")
-    return cinema.create(request, db)
+    return cinema.create(request, db, current_user.id)
 
 @router.get('/cinema_details',
                     response_model=List[schemas.showCinema])
 def get_cinema_details(db : Session = Depends(get_db)):
     return cinema.get_all(db)
 
+@router.put('/update_details', status_code=202)
+def update(id: int,request : schemas.cinema, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_merchant)):
+    return cinema.update(id,request,db, current_user.id, current_user.role)
+
 @router.put('/update_details/{id}', status_code=202)
-def update(id: int,request : schemas.cinema, db : Session = Depends(get_db)):
-    return cinema.update(id,request,db)
+def update(id: int,request : schemas.cinema, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
+    return cinema.update(id,request,db, current_user.id, current_user.role)
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-def destroy(id: int, db : Session = Depends(get_db)):
+def destroy(id: int, db : Session = Depends(get_db),
+        current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return cinema.destroy(id,db)
 '''
 @router.get('/cinema_details')

@@ -77,7 +77,7 @@ class CinemaHall(Base):
 
     cinema = relationship("Cinema",back_populates="cinemaHall")
     cinemaSeat = relationship("CinemaSeat",back_populates="cinemaHall")
-    show = relationship("Show",back_populates="cinemaHall", uselist=False)
+    show = relationship("Show",back_populates="cinemaHall")
 
 class CinemaSeat(Base):
     __tablename__ = "cinemaSeat"

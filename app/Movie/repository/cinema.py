@@ -11,10 +11,11 @@ def get_cinema_by_name(db: Session, name: str):
     return db.query(models.Cinema).filter(models.Cinema.name == name).first()
 
 
-def create(request : schemas.cinema, db : Session ):
+def create(request : schemas.cinema, db : Session, id: int ):
+    
     new_cinema = models.Cinema(name=request.name,
                 noOfScreens=request.noOfScreens,
-            user_id = 0,
+            user_id = id,
             location_id = request.location_id)
     db.add(new_cinema)
     db.commit()
@@ -30,11 +31,15 @@ def show(id: int, db : Session):
     return cinema 
 
 
-def update(id: int, request: schemas.cinema, db : Session):
-    new_cinema = db.query(models.Cinema).filter(models.Cinema.id == id)
+def update(cid: int, request: schemas.cinema, db : Session, user_id :int, role: str):
+    new_cinema = db.query(models.Cinema).filter(models.Cinema.id == cid)
+    if role != "admin":
+        if new_cinema[0].user_id != user_id: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"Cinema with id {cid} is not owned by user")
     if not new_cinema:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"User with the id {id} is not found")
+                            detail=f"User with the id {id} is not found")    
     new_cinema.update(request.dict())
     db.commit()
     return "updated"

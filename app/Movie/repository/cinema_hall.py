@@ -8,7 +8,16 @@ def get_cinemaHall_by_id(db : Session, cinemaHall_id : int):
     return db.query(models.CinemaHall).filter(models.CinemaHall.id == cinemaHall_id).first()
 
 
-def create(request : schemas.cinemaHall, db : Session ):
+def create(request : schemas.cinemaHall, db : Session, id : int, role : str):
+    if role != 'admin':
+        check_id = db.query(models.Cinema.id).\
+            filter(models.Cinema.user_id == id).first()
+        cinema_list = [check_id[i].id for i in range(len(check_id)) ]
+        if request.cinema_id not in cinema_list:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Cinema id {request.cinema } doesn't come under current user")
+
+
     new_cinemaHall = models.CinemaHall(name=request.name, 
                                         totalSeats=request.totalSeats, 
                                         cinema_id=request.cinema_id)                    
