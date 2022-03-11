@@ -26,7 +26,7 @@ def get_all_show(db : Session = Depends(get_db)):
 @router.put('/edit')
 def update(id: int,request : schemas.show, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
-    return show.update(current_user.id,request,db)
+    return show.update(id, request, db, current_user.id, current_user.role)
 
 @router.put('/edit/{id}')
 def update(id: int,request : schemas.show, db : Session = Depends(get_db),

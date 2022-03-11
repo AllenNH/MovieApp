@@ -18,11 +18,11 @@ def create(request : schemas.cinemaSeatAddRow , db : Session = Depends(get_db),
     return cinema_seat.create(request, db, current_user.id, current_user.role)
 
 
-@router.get('/details',status_code=200,
-            response_model=List[schemas.showCinemaSeat])
-def get_all_cinema_seats(db : Session = Depends(get_db),
+@router.get('/details',status_code=200)
+def get_all_cinema_seats(cinemaHall_id: int, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
-    return cinema_seat.get_user_cinemaSeat(db)
+    return cinema_seat.get_user_cinemaSeat(cinemaHall_id, 
+                        db, current_user.id, current_user.role)
 
 
 
@@ -38,9 +38,10 @@ def get_cinemaSeat_by_id(id: int,db : Session = Depends(get_db),
     return cinema_seat.get_by_id(db,id)
 
 @router.put('/edit', status_code=202)
-def update(id: int,request : schemas.cinemaSeat, db : Session = Depends(get_db),
+def update(cinemaSeat_id: int,request : schemas.cinemaSeat, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
-    return cinema_seat.update(current_user.id,request,db)
+    return cinema_seat.update(cinemaSeat_id, request, 
+                        db, current_user.id, current_user.role)
 
 @router.put('/edit/{id}', status_code=202)
 def update(id: int,request : schemas.cinemaSeat, db : Session = Depends(get_db),

@@ -50,17 +50,21 @@ def setup_seat(classic, classic_plus, premium,
         check_user = db.query(models.Cinema.user_id).\
             join(models.CinemaHall).\
             join(models.Show).\
-            filter(models.Show.id ==request.Show).first()
-        if id != check_user[0]:
+            filter(models.Show.id ==  show_id).first()
+        try:
+            if id != check_user[0]:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Show with id {show_id} doesn't belong to current user")
+            check_user = db.query(models.Cinema.user_id).\
+                join(models.CinemaHall).\
+                filter(models.CinemaHall.id ==cinemaHall_id).first()
+            
+            if id != check_user[0]:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Cinema Hall id: {cinemaHall_id } doesn't belong to current user")
+        except: 
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                    detail=f"Show with id {show_id} doesn't belong to current user")
-        check_user = db.query(models.Cinema.user_id).\
-            join(models.CinemaHall).\
-            filter(models.CinemaHall.id ==cinemaHall_id).first()
-        if id != check_user[0]:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                    detail=f"Cinema Hall id: {cinemaHall_id } doesn't belong to current user")
-        
+                        detail=f"cinemaHall id or show id is not present")
 
         
         

@@ -90,6 +90,18 @@ class show(BaseModel):
     cinemaHall_id : int
     movie_id : int
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "showDate": "2022-03-12",
+                "startTime": "9:30",
+                "endTime": "11:30",
+                "cinemaHall_id": 1,
+                "movie_id": 1
+                }
+        }
+
+
 
 
 class location(BaseModel):
