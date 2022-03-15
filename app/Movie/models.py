@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, DateTime, Time
-from Movie.database import Base
+from .database import Base
 from sqlalchemy.orm import relationship
 
 
