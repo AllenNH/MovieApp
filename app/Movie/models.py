@@ -41,7 +41,9 @@ class Movie(Base):
     language = Column(String)
     genre = Column(String)
     timestamp = Column(DateTime)
+    status = Column(Boolean,nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'))
+
 
     show = relationship("Show",back_populates="movie")
 

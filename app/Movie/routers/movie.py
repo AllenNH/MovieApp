@@ -23,6 +23,10 @@ def create(request : schemas.movie , db : Session = Depends(get_db),
                 detail=f"Movie with name{request.title} already exists")
     return movie.create(request, db, current_user.id)
 
+@router.get('/get_current_movies',status_code=200,
+            response_model=List[schemas.showMovie])
+def get_current_movies(db : Session = Depends(get_db)):
+    return movie.get_all_current_movie(db)
 
 @router.get('/movie_details',status_code=200,
             response_model=List[schemas.showMovie])

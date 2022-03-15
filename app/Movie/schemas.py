@@ -57,6 +57,7 @@ class movie(BaseModel):
     duration : int
     language : str
     genre : str
+    status : bool
 
     class Config:
         schema_extra = {
@@ -65,7 +66,8 @@ class movie(BaseModel):
                 "description": "About cars",
                 "duration": 120,
                 "language": "English",
-                "genre": "Animation"
+                "genre": "Animation",
+                "status": True
             }
         }
     
@@ -159,6 +161,15 @@ class cinemaHall(BaseModel):
      name : str
      totalSeats : int 
      cinema_id : int 
+
+     class Config:
+        schema_extra = {
+            "example": {
+            "name": "Screen1",
+            "totalSeats": 80,
+            "cinema_id": 1
+            }
+        }
 
 class showCinemaHall(BaseModel):
     id: int

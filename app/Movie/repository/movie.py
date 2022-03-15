@@ -20,6 +20,7 @@ def create(request : schemas.movie, db : Session, id: int ):
                 language=request.language,
                 genre=request.genre,
                 user_id = id,
+                status = request.status,
                 timestamp = datetime.utcnow())
     db.add(new_movie)
     db.commit()
@@ -54,3 +55,7 @@ def destroy(title: str,db: Session):
     movie.delete(synchronize_session=False)
     db.commit()
     return 'Deleted'
+
+def get_all_current_movie(db: Session):
+    movie = db.query(models.Movie).filter(models.Movie.status == True).all()
+    return movie
