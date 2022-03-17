@@ -22,7 +22,7 @@ def get_cinema_hall_details(db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     return cinema_hall.get_cinemaHall_by_id(db,current_user.id)
 
-''''
+'''
 @router.get('/details',status_code=200,response_model=List[schemas.showCinemaHall])
 def get_all_cinemahall(db : Session = Depends(get_db)):
     return cinema_hall.get_all_cinemaHall(db)

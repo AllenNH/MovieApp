@@ -57,3 +57,12 @@ def destroy(id: int,db: Session):
     cinema.delete(synchronize_session=False)
     db.commit()
     return 'Deleted'
+
+def get_cinema_details_by_movie(db : Session, id, location):
+    cinema  = db.query(models.Cinema).\
+                join(models.CinemaHall).\
+                    join(models.Show).\
+                        join(models.Movie).\
+                        join(models.Location).\
+        filter(models.Movie.id == id, models.Location.name.contains(location), models.Movie.status == 1).all()
+    return cinema 

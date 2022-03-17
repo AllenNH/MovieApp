@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.post('/add_booking')
+@router.post('/add_booking',response_model = schemas.showPayment)
 def create(request : schemas.booking , db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
     if request.noOfseats != len(request.seat_ids):
@@ -42,6 +42,7 @@ def update(id: int,request : schemas.booking, db : Session = Depends(get_db),
 def destroy(id: int, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return booking.destroy(id,db)
+
 
 
 

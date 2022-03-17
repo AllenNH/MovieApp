@@ -11,6 +11,7 @@ def get_booking_by_id(db : Session, Booking_id : int):
 
 
 def create(request : schemas.booking, db : Session, id: int ):
+
     new_booking = models.Booking(noOfseats=request.noOfseats,
                     timestamp = datetime.utcnow(),
                     status = request.status,
@@ -23,11 +24,18 @@ def create(request : schemas.booking, db : Session, id: int ):
     for seat_id in request.seat_ids:    
         
         show_seat = db.query(models.ShowSeat).\
-            filter(models.ShowSeat.cinemaSeat_id == seat_id).first()
-        
+            filter(models.ShowSeat.cinemaSeat_id == seat_id,
+                        models.ShowSeat.show_id == request.show_id).first()
+        if not show_seat:
+            db.rollback()
+            destroy(new_booking.id,db)
+            db.commit()
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"show_id with id {request.show_id} is not available")        
         if show_seat.status:
             db.rollback()
             destroy(new_booking.id,db)
+            db.commit()
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"seat with id {seat_id} is already booked")
         else:
@@ -51,7 +59,7 @@ def create(request : schemas.booking, db : Session, id: int ):
     db.refresh(payment)
 
 
-    return new_booking
+    return payment
 
 def get_user_booking(db: Session, id: int):
     booking_details = db.query(models.Booking).filter(models.Booking.user_id == id).all()

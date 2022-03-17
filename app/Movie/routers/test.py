@@ -6,6 +6,7 @@ from Movie.repository import booking
 from typing import List 
 from sqlalchemy.sql import func
 from datetime import date, time
+from typing import List, Optional
 
 get_db = database.get_db
 router = APIRouter(
@@ -21,12 +22,11 @@ def sum_price(booking_id : int , db : Session = Depends(get_db)):
     
     print(total_amt[0].amount)
 
-@router.post('/query')
-def query(movie_name : str,Mdate : date, city : 
-            str, db : Session = Depends(get_db)):
-    shows = db.query(models.Cinema.name).join(models.CinemaHall).\
-                join(models.Show).join(models.Movie).\
-                    filter(models.Movie.title.contains(movie_name)).\
-                        order_by(models.Movie.timestamp)
-    
-    print(shows.all())
+@router.post('/query', response_model=List[schemas.showCinemaMovie])
+def query(title : str, location :str, Mdate : Optional[date] = None, city : Optional[str] = None, db : Session = Depends(get_db)):
+    cinema  = db.query(models.Cinema).\
+                join(models.CinemaHall).\
+                    join(models.Show).\
+                        join(models.Location).\
+        filter(models.Movie.title.contains(title), models.Location.name.contains(location)).all()
+    return cinema 

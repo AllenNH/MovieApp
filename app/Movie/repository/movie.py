@@ -59,3 +59,26 @@ def destroy(title: str,db: Session):
 def get_all_current_movie(db: Session):
     movie = db.query(models.Movie).filter(models.Movie.status == True).all()
     return movie
+
+
+def get_all_current_movie_by_location(db: Session, location :str):
+    movie = db.query(models.Movie).\
+        join(models.Show).\
+            join(models.CinemaHall).\
+                join(models.Cinema).\
+                    join(models.Location).\
+        filter(models.Movie.status == True, models.Location.name.contains(location)).all()
+    
+    return movie
+
+def change_status(id :int, status : bool, db: Session):
+    movie = db.query(models.Movie).filter(models.Movie.id == id).first()
+    if not movie:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Movie with the id {id} is not found")
+    
+    movie.status = status
+
+    db.commit()
+
+    return {"msg":"status updated"}

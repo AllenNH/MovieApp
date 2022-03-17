@@ -40,7 +40,7 @@ def get_show_by_id(id: int,db: Session):
     if not show.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Show with id {id} not found")
-    return show
+    return show.first()
 
 def update(id: int, request: schemas.movie, db: Session, user_id: int, role : str):
     show = db.query(models.Show).filter(models.Show.id == id)

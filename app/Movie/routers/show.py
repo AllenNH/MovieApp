@@ -23,6 +23,12 @@ def create(request : schemas.show, db : Session = Depends(get_db),
 def get_all_show(db : Session = Depends(get_db)):
     return show.get_all_show(db)
 
+@router.get('/show_details/{id}',status_code=200,
+            response_model=schemas.showShow)
+def get_all_show(id: int, db : Session = Depends(get_db)):
+    return show.get_show_by_id(id,db)
+
+
 @router.put('/edit')
 def update(id: int,request : schemas.show, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):

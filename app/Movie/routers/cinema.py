@@ -22,10 +22,12 @@ def create(request : schemas.cinema, db : Session = Depends(get_db),
                 detail=f"Cinema with name{request.name} already exists")
     return cinema.create(request, db, current_user.id)
 
+
 @router.get('/cinema_details',
                     response_model=List[schemas.showCinema])
 def get_cinema_details(db : Session = Depends(get_db)):
     return cinema.get_all(db)
+
 
 @router.put('/update_details', status_code=202)
 def update(id: int,request : schemas.cinema, db : Session = Depends(get_db),
@@ -41,28 +43,12 @@ def update(id: int,request : schemas.cinema, db : Session = Depends(get_db),
 def destroy(id: int, db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_admin)):
     return cinema.destroy(id,db)
-'''
-@router.get('/cinema_details')
-def get_user_details(db : Session = Depends(get_db),
-        current_user: schemas.user = Depends(oauth2.get_current_user)):
-    return cinema.show(db)
 
 
 
-@router.put('/update_cinema_details', status_code=202)
-def update(request : schemas.user, db : Session = Depends(get_db),
-        current_user: schemas.user = Depends(oauth2.get_current_user)):
-    return cinema.update()
 
+@router.post('/cinema_details_s', response_model=List[schemas.showCinemaMovie])
+def get_cinema_details_by_movie(id : int, location: str, db : Session = Depends(get_db)):
+    print("form cinemaMovies")
+    return cinema.get_cinema_details_by_movie(db, id, location)
 
-@router.delete('/delete_cinema/{id}', status_code=204)
-def destroy(id, db : Session = Depends(get_db),
-        current_user: schemas.user = Depends(oauth2.get_current_user)):
-        #only for admin
-    pass
-
-@router.get('/cinema_details/{id}', status_code=200)
-def get_useer_details(id: int,db : Session = Depends(get_db)):
-    #only for admin
-    return cinema.get_user_by_id(db, id)
-'''

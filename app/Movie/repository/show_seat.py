@@ -79,3 +79,5 @@ def setup_seat(classic, classic_plus, premium,
                                     cinemaSeat_id=seat.id,
                                     show_id=show_id,booking_id=0)
         print(create(request, db))
+
+    return {"msg":"updated"}
