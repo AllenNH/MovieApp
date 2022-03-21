@@ -45,7 +45,16 @@ def destroy(id: int,db: Session):
     return 'Deleted'
 
 def setup_seat(classic, classic_plus, premium,
-                                    show_id, cinemaHall_id, db, id: int, role: str):
+                                    show_id, db, id: int, role: str):
+    cinemaHall = db.query(models.Show.cinemaHall_id).\
+                        filter(models.Show.id == show_id).first()
+    cinemaHall_id = cinemaHall.cinemaHall_id
+    show_seat = db.query(models.ShowSeat.id).\
+                    filter(models.ShowSeat.show_id == show_id).first()
+    if show_seat:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Show already mapped")
+        
     if role != 'admin':
         check_user = db.query(models.Cinema.user_id).\
             join(models.CinemaHall).\
@@ -66,18 +75,21 @@ def setup_seat(classic, classic_plus, premium,
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                         detail=f"cinemaHall id or show id is not present")
 
-        
-        
-    cinema_seats= db.query(models.CinemaSeat
-                ).filter(models.CinemaSeat.cinemaHall_id == cinemaHall_id).all()  
+
+    
+    cinema_seats= db.query(models.CinemaSeat).\
+            filter(models.CinemaSeat.cinemaHall_id == cinemaHall_id).all()  
     price = {"classic": classic,
             "classic_plus": classic_plus,"premium": premium}
     print(price)
-    
-    for seat in cinema_seats:
-        request = schemas.showSeat(status=0,price=price.get(seat.seatType,0),
-                                    cinemaSeat_id=seat.id,
-                                    show_id=show_id,booking_id=0)
-        print(create(request, db))
+    if cinema_seats :
+        for seat in cinema_seats:
+            request = schemas.showSeat(status=0,price=price.get(seat.seatType,0),
+                                        cinemaSeat_id=seat.id,
+                                        show_id=show_id,booking_id=0)
+            print(create(request, db))
 
-    return {"msg":"updated"}
+        return {"msg":"updated"}
+    else:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Cinema seats not initilized")

@@ -42,11 +42,11 @@ def destroy(id: int, db : Session = Depends(get_db),
 
 @router.post('/setup_seat')
 def setup_seat(classic: float,classic_plus: float,premium: float,
-                show_id: int,cinema_hall_id:int,
+                show_id: int,
                 db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     
     return show_seat.setup_seat(classic, classic_plus, premium,
-                                    show_id, cinema_hall_id, db, 
+                                    show_id, db, 
                                         current_user.id, current_user.role)
 
