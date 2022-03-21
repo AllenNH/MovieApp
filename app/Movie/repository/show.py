@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, status, HTTPException, Response
 from Movie import schemas, models
 from sqlalchemy.orm import Session
 from Movie.repository import movie
-
+from datetime import datetime, time
+from sqlalchemy import or_, and_
 
 
 def create(request : schemas.show, db : Session, id : int, role : str):
@@ -18,7 +19,22 @@ def create(request : schemas.show, db : Session, id : int, role : str):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"Movie with id {request.movie_id} is not present")
 
-    
+        check_hall = db.query(models.CinemaHall).\
+                            join(models.Show).\
+            filter(models.Show.showDate
+                         == datetime.fromisoformat(str(request.showDate)),
+                         models.Show.cinemaHall_id == request.cinemaHall_id,
+                or_(and_(models.Show.startTime <= time.fromisoformat(str(request.startTime)),
+                models.Show.endTime >= time.fromisoformat(str(request.startTime))),
+                and_(models.Show.startTime <= time.fromisoformat(str(request.endTime)),
+                models.Show.endTime >= time.fromisoformat(str(request.endTime)))))
+        print(check_hall)
+        print(check_hall.first())
+        if check_hall.first():
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Movie hall is booked for the specified time")
+
+
     
     new_show = models.Show(showDate=request.showDate,
                 startTime=request.startTime,
