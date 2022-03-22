@@ -14,7 +14,7 @@ router = APIRouter(
     tags = ['Testing']
 
 )
-
+#testing out new query
 @router.post('')
 def sum_price(booking_id : int , db : Session = Depends(get_db)):
     total_amt = db.query(func.sum(models.ShowSeat.price).label('amount')).\
