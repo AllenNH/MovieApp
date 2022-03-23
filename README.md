@@ -9,17 +9,16 @@ Build an application backend (APIs) to allow booking of movie tickets.
 - Booking can be done against a movie in a theatre against a specific seat on a specific date and time slot
 
 
-
 ##Steps to run API
-pwd ->MovieApp
--pip install -r requirements.txt
--cd app
--unicorn main:app --reload
--connect to localhost/docs (http://127.0.0.1:8000/docs)
+- pwd ->MovieApp
+- pip install -r requirements.txt
+- cd app
+- unicorn main:app --reload
+- connect to localhost/docs (http://127.0.0.1:8000/docs)
 
-currently 3 users are configured:
-username: 1 -> admin
+#currently 3 users are configured:
+- username: 1 -> admin
           2 -> merchant
           5 -> user
           
-password-> admin (for all)
+- password-> admin (for all)
