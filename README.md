@@ -16,7 +16,7 @@ Build an application backend (APIs) to allow booking of movie tickets.
 - unicorn main:app --reload
 - connect to localhost/docs (http://127.0.0.1:8000/docs)
 
-# currently 3 users are configured:
+currently 3 users are configured:
 - username: 1 -> admin
           2 -> merchant
           5 -> user
