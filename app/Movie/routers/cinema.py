@@ -4,7 +4,8 @@ from Movie import schemas, models, database, oauth2
 from Movie.hashing import Hash 
 from sqlalchemy.orm import Session
 from Movie.repository import cinema
-from typing import List
+from typing import List, Optional 
+from datetime import date
 
 get_db = database.get_db
 router = APIRouter(
@@ -48,7 +49,8 @@ def destroy(id: int, db : Session = Depends(get_db),
 
 
 @router.post('/cinema_details_s', response_model=List[schemas.showCinemaShow])
-def get_cinema_details_by_movie(id : int, location: str, db : Session = Depends(get_db)):
+def get_cinema_details_by_movie(id : int, location: str, 
+                    showDate: Optional[date] = date.today(), db : Session = Depends(get_db)):
     print("form cinemaMovies")
-    return cinema.get_cinema_details_by_movie(db, id, location)
+    return cinema.get_cinema_details_by_movie(db, id, location, showDate)
 

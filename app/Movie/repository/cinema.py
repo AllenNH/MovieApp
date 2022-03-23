@@ -2,6 +2,7 @@ from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 from Movie import schemas, models
 from datetime import datetime
+from sqlalchemy import func
 
 
 def get_cinema_by_id(db: Session, cinema_id: int):
@@ -58,11 +59,12 @@ def destroy(id: int,db: Session):
     db.commit()
     return 'Deleted'
 
-def get_cinema_details_by_movie(db : Session, id, location):
+def get_cinema_details_by_movie(db : Session, id, location , showDate):
     cinema  = db.query(models.Show).\
                 join(models.CinemaHall).\
                     join(models.Cinema).\
                         join(models.Movie).\
                         join(models.Location).\
-        filter(models.Movie.id == id, models.Location.name.contains(location), models.Movie.status == 1).all()
+        filter(models.Movie.id == id, models.Location.name.contains(location), 
+                    models.Movie.status == 1,func.date(models.Show.showDate) == showDate).all()
     return cinema 
