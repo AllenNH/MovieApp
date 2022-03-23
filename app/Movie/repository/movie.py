@@ -6,7 +6,8 @@ from datetime import datetime
 
 
 def get_movie_by_name(db : Session, movie_name : str):
-    return db.query(models.Movie).filter(models.Movie.title == movie_name).first()
+    return db.query(models.Movie).\
+        filter(models.Movie.title.contains(movie_name)).first()
 
 
 def get_movie_by_id(db : Session, movie_id : int):

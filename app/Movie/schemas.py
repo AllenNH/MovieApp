@@ -135,7 +135,6 @@ class showLocation(BaseModel):
 
 class booking(BaseModel):
     noOfseats : int
-    status : int
     show_id : int 
     seat_ids : list[int]
 
@@ -143,7 +142,6 @@ class booking(BaseModel):
         schema_extra = {
             "example": {
             "noOfseats": 3,
-            "status":   1,
             "show_id": 1,
             "seat_ids": [1,17,33]
             }
@@ -199,6 +197,7 @@ class showCinemaHall(BaseModel):
     name : str
     totalSeats : int
     cinema_id : int 
+    cinema : showCinema
 
     class Config():
         orm_mode = True
@@ -313,6 +312,28 @@ class showCinemaShowSeat(BaseModel):
         orm_mode = True
 
 
+class showCinemaMovie(BaseModel):
+    id: int
+    name : str 
+    location_id: int
+
+    #cinemaHall : List[showCinemaHallMovie]  
+
+    class Config():
+        orm_mode = True
+
+class showCinemaHallMovie(BaseModel):
+    id: int
+    name : str
+    totalSeats : int    
+
+    #show : List[showCinemaMovie]
+    cinema : showCinemaMovie
+
+    class Config():
+        orm_mode = True
+
+
 class showCinemaShow(BaseModel):
 
     movie : showMovieForShow
@@ -324,30 +345,13 @@ class showCinemaShow(BaseModel):
     cinemaHall_id : int
     movie_id : int
 
+    cinemaHall : showCinemaHallMovie
+
     
     class Config():
         orm_mode = True
 
-class showCinemaHallMovie(BaseModel):
-    id: int
-    name : str
-    totalSeats : int    
 
-    show : List[showCinemaShow]
-
-
-    class Config():
-        orm_mode = True
-
-class showCinemaMovie(BaseModel):
-    id: int
-    name : str 
-    location_id: int
-
-    cinemaHall : List[showCinemaHallMovie]  
-
-    class Config():
-        orm_mode = True
 
 
 

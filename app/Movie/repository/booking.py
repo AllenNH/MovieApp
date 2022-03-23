@@ -14,7 +14,7 @@ def create(request : schemas.booking, db : Session, id: int ):
 
     new_booking = models.Booking(noOfseats=request.noOfseats,
                     timestamp = datetime.utcnow(),
-                    status = request.status,
+                    status = 1,
                     user_id = id,
                     show_id = request.show_id)                    
     db.add(new_booking)
@@ -52,7 +52,7 @@ def create(request : schemas.booking, db : Session, id: int ):
 
     payment = models.Payment(amount=total_amt[0].amount,
                     timestamp = datetime.utcnow(),
-                    transaction_id = 11111,
+                    transaction_id = 14531,
                     booking_id = new_booking.id)  
     db.add(payment)
     db.commit()
@@ -62,7 +62,9 @@ def create(request : schemas.booking, db : Session, id: int ):
     return payment
 
 def get_user_booking(db: Session, id: int):
-    booking_details = db.query(models.Booking).filter(models.Booking.user_id == id).all()
+    booking_details = db.query(models.Payment).\
+            join(models.Booking).\
+            filter(models.Booking.user_id == id).all()
     return booking_details
 
 def get_all_booking(db: Session):

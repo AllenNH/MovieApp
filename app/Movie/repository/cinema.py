@@ -59,9 +59,9 @@ def destroy(id: int,db: Session):
     return 'Deleted'
 
 def get_cinema_details_by_movie(db : Session, id, location):
-    cinema  = db.query(models.Cinema).\
+    cinema  = db.query(models.Show).\
                 join(models.CinemaHall).\
-                    join(models.Show).\
+                    join(models.Cinema).\
                         join(models.Movie).\
                         join(models.Location).\
         filter(models.Movie.id == id, models.Location.name.contains(location), models.Movie.status == 1).all()

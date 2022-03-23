@@ -17,7 +17,7 @@ def create(request : schemas.cinemaHall , db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     return cinema_hall.create(request, db, current_user.id, current_user.role)
 
-@router.get('/details', status_code=200)
+@router.get('/details', status_code=200, response_model = List[schemas.showCinemaHall])
 def get_cinema_hall_details(db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.check_if_merchant)):
     return cinema_hall.get_cinemaHall_by_id(db,current_user.id)

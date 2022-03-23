@@ -22,7 +22,7 @@ def create(request : schemas.booking , db : Session = Depends(get_db),
 
 
 @router.get('/booking_details',status_code=200,
-            response_model=List[schemas.showBooking])
+            response_model=List[schemas.showPayment])
 def get_user_booking(db : Session = Depends(get_db),
         current_user: schemas.user = Depends(oauth2.get_current_user)):
     return booking.get_user_booking(db, current_user.id)

@@ -23,10 +23,18 @@ def create(request : schemas.show, db : Session = Depends(get_db),
 def get_all_show(db : Session = Depends(get_db)):
     return show.get_all_show(db)
 
-@router.get('/show_details/{id}',status_code=200,
+@router.get('/show_details/{id}',status_code=200)
+def get_all_show(id: int, db : Session = Depends(get_db)):
+    return show.get_show_by_id(id,db)
+
+@router.get('/show_seat_details/{id}',status_code=200,
             response_model=schemas.showShow)
 def get_all_show(id: int, db : Session = Depends(get_db)):
     return show.get_show_by_id(id,db)
+
+@router.get('/show_seats_available/{id}',status_code=200)
+def get_all_show(id: int, db : Session = Depends(get_db)):
+    return show.get_show_seats_available(id,db)
 
 
 @router.put('/edit')
@@ -50,3 +58,5 @@ def destroy(id: int, db : Session = Depends(get_db),
             response_model=List[schemas.showShow])
 def get_show_by_movie_name(name: str,db : Session = Depends(get_db)):
     return show.get_by_name(name, db)
+
+

@@ -4,8 +4,10 @@ from Movie import schemas, models
 from datetime import datetime
 
 
-def get_cinemaHall_by_id(db : Session, cinemaHall_id : int):
-    return db.query(models.CinemaHall).filter(models.CinemaHall.id == cinemaHall_id).first()
+def get_cinemaHall_by_id(db : Session, user_id : int):
+    return db.query(models.CinemaHall).\
+        join(models.Cinema).\
+        filter(models.Cinema.id == user_id).all()
 
 
 def create(request : schemas.cinemaHall, db : Session, id : int, role : str):

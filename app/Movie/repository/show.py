@@ -58,6 +58,17 @@ def get_show_by_id(id: int,db: Session):
                             detail=f"Show with id {id} not found")
     return show.first()
 
+
+def get_show_seats_available(id: int,db: Session):
+    showSeat = db.query(models.ShowSeat).filter(models.ShowSeat.show_id == id).all()
+    if not showSeat:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Seat is not yet mapped")
+    count = 0
+    for seat in showSeat:
+        if seat.status == False:
+            count+=1
+    return {"seats_available" : count}
 def update(id: int, request: schemas.movie, db: Session, user_id: int, role : str):
     show = db.query(models.Show).filter(models.Show.id == id)
     if not show.first():
@@ -91,5 +102,6 @@ def delete(id: int,db: Session):
     return 'Deleted'
 
 def get_by_name(name,db: Session):
-    show = db.query(models.Show).join(models.Movie).filter(models.Movie.title == name).all()
+    show = db.query(models.Show).join(models.Movie).\
+        filter(models.Movie.title.contains(name)).all()
     return show
