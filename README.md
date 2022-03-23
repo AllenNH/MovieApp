@@ -12,10 +12,10 @@ Build an application backend (APIs) to allow booking of movie tickets.
 
 ##Steps to run API
 pwd ->MovieApp
-1.pip install -r requirements.txt
-2.cd app
-3.unicorn main:app --reload
-4.connect to localhost/docs (http://127.0.0.1:8000/docs)
+-pip install -r requirements.txt
+-cd app
+-unicorn main:app --reload
+-connect to localhost/docs (http://127.0.0.1:8000/docs)
 
 currently 3 users are configured:
 username: 1 -> admin
