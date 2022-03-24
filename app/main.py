@@ -1,13 +1,16 @@
 from fastapi import FastAPI, Depends
-from Movie import schemas, models, database
-from Movie.database import  engine
+from .Movie import schemas, models, database
+from .Movie.database import  engine
 from sqlalchemy.orm import Session
-from Movie.routers import user, authenticate_user, cinema, movie, show, location 
-from Movie.routers import booking, show_seat, cinema_hall, cinema_seat, admin, test
+from .Movie.routers import user, authenticate_user, cinema, movie, show, location 
+from .Movie.routers import booking, show_seat, cinema_hall, cinema_seat, admin, test
 app = FastAPI()
 
 #models.Base.metadata.create_all(engine) 
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World121"} 
 
 app.include_router(authenticate_user.router)
 app.include_router(user.router)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, models
+from .. import schemas, models
 from sqlalchemy.orm import Session
-from Movie.repository import movie
+from ..repository import movie
 from datetime import datetime, time
 from sqlalchemy import or_, and_
 
