@@ -64,11 +64,15 @@ def get_show_seats_available(id: int,db: Session):
     if not showSeat:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Seat is not yet mapped")
-    count = 0
+    count = 0    
+    total_seats = 0
     for seat in showSeat:
         if seat.status == False:
             count+=1
-    return {"seats_available" : count}
+        total_seats+=1
+
+    return {"seats_available" : count,
+            "total_seats": total_seats}
 def update(id: int, request: schemas.movie, db: Session, user_id: int, role : str):
     show = db.query(models.Show).filter(models.Show.id == id)
     if not show.first():
