@@ -102,6 +102,7 @@ class Show(Base):
     showDate = Column(DateTime)
     startTime = Column(Time)
     endTime = Column(Time)
+    status = Column(Boolean, default=True)
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id'))
     movie_id = Column(Integer, ForeignKey('movie.id'))
 

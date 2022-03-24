@@ -1,23 +1,22 @@
 from fastapi import FastAPI, Depends
-from Movie import schemas, models, database
+from Movie import schemas, models, database, run_scheduled_task
 from Movie.database import  engine
 from sqlalchemy.orm import Session
 from Movie.routers import user, authenticate_user, cinema, movie, show, location 
 from Movie.routers import booking, show_seat, cinema_hall, cinema_seat, admin, test
 from fastapi_utils.tasks import repeat_every
 
-from example_scheduler import arq_worker
+#from example_scheduler import arq_worker
 
 app = FastAPI()
 
 #models.Base.metadata.create_all(engine) 
-@app.on_event("startup")
-async def startup_event():
-    await arq_worker.start(handle_signals=False)
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    await arq_worker.close()
+@app.on_event("startup")
+@repeat_every(seconds=60*60*24 )  # 24 hour
+def scheduled_task():
+    run_scheduled_task.clear_old_movie()
+    pass
 
 
 app.include_router(authenticate_user.router)
