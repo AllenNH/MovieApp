@@ -1,8 +1,8 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from Movie import schemas, database, models
+from .. import schemas, database, models
 from sqlalchemy.orm import Session
-from Movie.repository import booking
+from ..repository import booking
 from typing import List 
 from sqlalchemy.sql import func
 from datetime import date, time

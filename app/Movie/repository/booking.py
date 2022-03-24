@@ -1,9 +1,9 @@
 from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
-from Movie import schemas, models
+from .. import schemas, models
 from datetime import datetime
 from sqlalchemy.sql import func
-import re
+
 
 
 def get_booking_by_id(db : Session, Booking_id : int):

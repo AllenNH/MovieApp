@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, database, models, token
-from Movie.hashing import Hash
+from .. import schemas, database, models, token
+from ..hashing import Hash
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 

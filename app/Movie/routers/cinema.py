@@ -1,9 +1,9 @@
 from turtle import circle
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, models, database, oauth2
-from Movie.hashing import Hash 
+from .. import schemas, models, database, oauth2
+from ..hashing import Hash 
 from sqlalchemy.orm import Session
-from Movie.repository import cinema
+from ..repository import cinema
 from typing import List, Optional 
 from datetime import date
 

@@ -1,7 +1,7 @@
 from tkinter import N
 from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
-from Movie import schemas, models
+from .. import schemas, models
 from datetime import datetime
 
 

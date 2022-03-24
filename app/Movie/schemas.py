@@ -2,7 +2,7 @@ from datetime import date, time
 from typing import List, Optional
 from pydantic import BaseModel
 
-from Movie.models import CinemaSeat
+from ..Movie.models import CinemaSeat
 
 class user(BaseModel):
     

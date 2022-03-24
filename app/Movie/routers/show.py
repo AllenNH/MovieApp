@@ -1,8 +1,8 @@
 from turtle import circle
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, models, database, oauth2
+from .. import schemas, models, database, oauth2
 from sqlalchemy.orm import Session
-from Movie.repository import show
+from ..repository import show
 from typing import List 
 
 get_db = database.get_db

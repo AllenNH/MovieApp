@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, models, database, oauth2
-from Movie.hashing import Hash 
+from .. import schemas, models, database, oauth2
+from ..hashing import Hash 
 from sqlalchemy.orm import Session
-from Movie.repository import admin
+from ..repository import admin
 from typing import List
 
 get_db = database.get_db

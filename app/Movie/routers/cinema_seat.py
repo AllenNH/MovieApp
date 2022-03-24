@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from Movie import schemas, database, oauth2
+from .. import schemas, database, oauth2
 from sqlalchemy.orm import Session
-from Movie.repository import cinema_seat
+from ..repository import cinema_seat
 from typing import List 
 
 get_db = database.get_db

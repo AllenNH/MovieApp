@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from Movie import schemas, models
-from Movie.hashing import Hash 
+from .. import schemas, models
+from ..hashing import Hash 
 from sqlalchemy.orm import Session
 from datetime import datetime
 
