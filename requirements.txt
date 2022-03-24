@@ -6,3 +6,6 @@
  python-jose
  python-multipart
  alembic
+ #celery
+ fastapi-utils
+ arq
