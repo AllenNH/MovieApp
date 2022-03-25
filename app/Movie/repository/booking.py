@@ -12,6 +12,11 @@ def get_booking_by_id(db : Session, Booking_id : int):
 
 def create(request : schemas.booking, db : Session, id: int ):
 
+    if request.payment_methods not in [1,2,3]:        
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"payment option {request.payment_methods} is not available")  
+
+
     new_booking = models.Booking(noOfseats=request.noOfseats,
                     timestamp = datetime.utcnow(),
                     status = 1,
@@ -52,6 +57,7 @@ def create(request : schemas.booking, db : Session, id: int ):
 
     payment = models.Payment(amount=total_amt[0].amount,
                     timestamp = datetime.utcnow(),
+                    payment_method=request.payment_methods,
                     transaction_id = 14531,
                     booking_id = new_booking.id)  
     db.add(payment)
