@@ -51,6 +51,6 @@ def destroy(id: int, db : Session = Depends(get_db),
 @router.post('/cinema_details_s', response_model=List[schemas.showCinemaShow])
 def get_cinema_details_by_movie(id : int, location: str, 
                     showDate: Optional[date] = date.today(), db : Session = Depends(get_db)):
-    print("form cinemaMovies")
+    
     return cinema.get_cinema_details_by_movie(db, id, location, showDate)
 

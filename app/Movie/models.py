@@ -102,6 +102,7 @@ class Show(Base):
     showDate = Column(DateTime)
     startTime = Column(Time)
     endTime = Column(Time)
+    status = Column(Boolean, default=True)
     cinemaHall_id = Column(Integer, ForeignKey('cinemaHall.id'))
     movie_id = Column(Integer, ForeignKey('movie.id'))
 
@@ -129,6 +130,7 @@ class Payment(Base):
     id = Column(Integer, primary_key=True,index=True)
     amount = Column(Float)
     timestamp = Column(DateTime)
+    payment_method = Column(Integer, nullable=False)
     transaction_id = Column(Integer)
     booking_id = Column(Integer, ForeignKey('booking.id'))
 

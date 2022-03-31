@@ -137,13 +137,15 @@ class booking(BaseModel):
     noOfseats : int
     show_id : int 
     seat_ids : list[int]
+    payment_methods :int
 
     class Config:
         schema_extra = {
             "example": {
             "noOfseats": 3,
             "show_id": 1,
-            "seat_ids": [1,17,33]
+            "seat_ids": [1,17,33],
+            "payment_methods" : "1/2/3(int)"
             }
         }
 
