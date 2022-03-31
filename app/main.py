@@ -15,6 +15,7 @@ app = FastAPI()
 @app.on_event("startup")
 @repeat_every(seconds=60*60*24 )  # 24 hour
 def scheduled_task():
+    print("he")
     run_scheduled_task.clear_old_movie()
     pass
 
